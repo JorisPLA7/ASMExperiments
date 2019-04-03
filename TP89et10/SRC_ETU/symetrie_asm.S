@@ -55,6 +55,10 @@ permuter_lignes:
                                                                                         
 #ifndef  C_SYMETRIE_AXE_H                                                               
 symetrie_axe_h:	
+			push {lr}
+			bl EcrNdecimal32                                                                 
+			pop {lr}
+			
 			mov r3 #HEIGHT
 			mov r4 #WIDTH
 			lsr r5, r4, #1 		@on parcours la moitié des lignes pour ne pas inverser deux fois
