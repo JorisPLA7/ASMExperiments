@@ -30,7 +30,7 @@ symetrie_octet:
 #endif  // C_SYMETRIE_OCTET                                                             
 @ r0 : parametre tab                                                                    
 @ r1 : parametre col                                                                    
-                                                                                        
+
 #ifndef C_PERMUTER_COLS                                                                 
                                                                                         
 permuter_cols:                                                                          
@@ -39,7 +39,7 @@ permuter_cols:
 @ r0 : paramètre image                                                                  
                                                                                         
 #ifndef C_SYMETRIE_AXE_V                                                                
-symetrie_axe_v:                                                                         
+symetrie_axe_v:                                                                      
                                                                                         
 #endif // C_SYMETRIE_AXE_V                                                              
 @ r0 : tab                                                                              
@@ -47,37 +47,78 @@ symetrie_axe_v:
                                                                                         
 #ifndef C_PERMUTER_LIGNES                                                               
 permuter_lignes:
-
-debutForLigne:	mov r3, #0
-		mov r1, #HEIGHT
-		mov r2, #WIDTH
-		mul r4, r2, r1
-		sub r4, r4, #1
-		add r4, r4, r0
-		
-		cmp r3, #BYTES_PER_LINE
-		beq finForLigne
-		
-                
-		ldrb r5, [r8]			@load octet du tableau
-		mvn r5, r5			@Complément à 1 de l'octet 
-ecrireDonnees:  strb r5, [r8]			@ecriture de l'octet
-
-
-		add r8, r8, #1 @aller addr suivante
-	  	add r3, r3, #1 @+1 iterateur case tableau
-		b debutFor
-
-	
-finForLigne: bx lr 
-                
-		                                                                    
+                                                    
                                                                                         
 #endif // C_PERMUTER_LIGNES                                                             
                                                                                         
 @ r0 : paramètre image                                                                  
                                                                                         
 #ifndef  C_SYMETRIE_AXE_H                                                               
-symetrie_axe_h:                                                                         
-                                                                                        
+symetrie_axe_h:	
+			mov r3 #HEIGHT
+			mov r4 #WIDTH
+			lsr r5, r4, #1 		@on parcours la moitié des lignes pour ne pas inverser deux fois
+			mul r6, r3, r4
+			sub r6, r6, #BYTES_PER_LINE
+			mov r3, #0          @ iterateur i lignes
+			mov r4, #0			@ iterateur j colonnes 
+			mov r5, r0
+
+			
+debutForH:	
+			cmp r3, #HEIGHT
+			beq finForH
+
+			mov r4, #0			@RAZ du compteur de colonnes
+			b debutForH
+appelCopieLigne:
+			add r5, r5, #BYTES_PER_LINE
+			sub r6, r6, #BYTES_PER_LINE
+
+finForH: bx lr 
+
+
+debutCopieLigne:
+			cmp r4, #BYTES_PER_LINE
+			beq finCopieLigne
+
+			ldrb r5, [r5, r4]			@load octet du tableau fin
+			ldrb r6, [r6, r4]			@load octet du tableau debut
+			strb r5, [r8]			@ecriture de l'octet
+			strb r6, [r0]
+
+			add r4, r4, #1
+			b debutCopieLigne
+
+finCopieLigne:
+			b appelCopieLigne
+
 #endif   // C_SYMETRIE_AXE_H                                                            
+symetrie_axe_hv: 
+			mov r4, r0
+			mov r3, #0
+			mov r1, #HEIGHT
+			mov r2, #WIDTH
+			mul r8, r2, r1				@ taille du tableau en octets
+			sub r8, r8, #1
+
+debutForHV: 
+			cmp r3, #HEIGHT
+			beq finForLigneHV
+			
+			add r0, r4, r3
+			bl symetrie_octet
+			
+			ldrb r5, [r4, r8]			@load octet du tableau fin
+			ldrb r6, [r4, r3]			@load octet du tableau debut
+			strb r5, [r8]			@ecriture de l'octet
+			strb r6, [r0]
+
+			sub r8, r8, #1 @aller addr suivante
+			add r3, r3, #1 		@+1 iterateur case tableau
+			b debutForHV
+
+	
+finForLigneHV: bx lr 
+                
+		                
