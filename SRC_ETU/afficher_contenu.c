@@ -9,7 +9,7 @@ void afficher_contenu (unsigned char *address) {
    int i;
    int position;
 
-   afficher_entier("\n#define width %d\n", WIDTH);
+  afficher_entier("\n#define width %d\n", WIDTH);
    afficher_entier("#define height %d\n\n", HEIGHT);
    afficher_chaine("static unsigned char bits[] = {\n","");
    
