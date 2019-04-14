@@ -60,7 +60,7 @@ symetrie_octet:
 	@ On charge l'octet
 	ldrb r1, [r0]
 	@ On trouve son symetrique 
-	ldr r2, adr_tabsym
+	ldr r2, tabsym
 	ldrb r1, [r2, r1]
 	@ On stock l'octet
 	strb r1, [r0]
@@ -73,26 +73,7 @@ symetrie_octet:
 @ r0 : parametre tab                                                                    
 @ r1 : parametre col                                                                    
                                                                                         
-#ifndef C_PERMUTER_COLS                                                                 
-
-@ permuter_cols:                                                                          
-
-@ 	@ empile le link register
-@ 	push {lr}
-@ 	@ On calcule l'indice du tableau
-@ 	ldr r2, adr_bytes_per_line
-@ 	sub r2, #1
-@ 	sub r2, r1
-@ 	@ On charge la valeur a l'indice du tableau 1
-@ 	ldrb r3, [r0, r2]
-@ 	@ On charge la valeur a l'indice du tableau 2
-@ 	ldrb r4, [r0, r1]
-@ 	@ On permute ces deux valeurs
-@ 	strb r4, [r0, r2]
-@ 	strb r3, [r0, r1]
-@ 	@ dépile le link register
-@ 	pop {lr}
-@ 	bx lr
+#ifndef C_PERMUTER_COLS               
 
 permuter_cols:
 
@@ -100,7 +81,7 @@ permuter_cols:
 	push {lr}
     
     @ tmp = tab[BYTES_PER_LINE -1 - col];
-    ldrb r2, adr_bytes_per_line
+    ldrb r2, bytes_per_line
     add r3, r2, r0
     sub r3, r3, #1
     sub r3, r3, r1
@@ -130,9 +111,9 @@ symetrie_axe_v:
 	@ empile le link register
 	push {lr}
 	@ On charge les constantes
-	ldr r5, adr_bytes
-	ldr r6, adr_height
-	ldr r7, adr_bytes_per_line
+	ldr r5, bytes
+	ldr r6, height
+	ldr r7, bytes_per_line
 	lsr r8, r7, #1
 	@ On sauvegarde l'adresse de l'image
 	mov r9, r0
@@ -192,10 +173,10 @@ symetrie_axe_v:
 @ 	@ empile le link register
 @ 	push {lr}
 @ 	@ On charge les constantes
-@ 	ldr r7, adr_bytes_per_line
+@ 	ldr r7, bytes_per_line
 @ 	lsr r8, r7, #1
-@ 	ldr r6, adr_height
-@ 	ldr r5, adr_bytes
+@ 	ldr r6, height
+@ 	ldr r5, bytes
 @ 	@ On sauvegarde l'adresse de l'image
 @ 	mov r3, r0
 @ 	@ iterateur à 0
@@ -251,10 +232,10 @@ permuter_lignes:
 	
 	@ empile le link register
 	push {lr}
-	ldr r3, adr_bytes_per_line
+	ldr r3, bytes_per_line
 	mul r2, r3, r1
 	@ r2 <=> mem shift entre r0 et la ligne li, [li]
-	ldr r5, adr_height
+	ldr r5, height
 	sub r5, r1
 	sub r5, #1
 	mul r5, r3
@@ -278,8 +259,8 @@ permuter_lignes:
 @ 	@squvegarde adr tableau
 @ 	mov r9, r0
 @ 	@chargement des constantes
-@ 	ldr r2, adr_bytes_per_line
-@ 	ldr r4, adr_height
+@ 	ldr r2, bytes_per_line
+@ 	ldr r4, height
 
 @ 	@calcul des adresses
 @ 	mul r3, r1, r2
@@ -313,9 +294,9 @@ symetrie_axe_h:
 	@ empile le link register
 	push {lr}
 	@ On initialise les constantes et la boucle 
-	ldr r8, adr_height
+	ldr r8, height
 	lsr r8, #1
-	ldr r7, adr_bytes_per_line
+	ldr r7, bytes_per_line
 	mov r1, #0
 	mov r9, r0
 	@ parcours des height/2 premières lignes
@@ -347,9 +328,9 @@ symetrie_axe_h:
 #endif   // C_SYMETRIE_AXE_H    
 
 
-adr_tabsym : .word tabsym_octet
-adr_bytes_per_line : .word BYTES_PER_LINE
-adr_bytes : .word BYTES
-adr_height : .word HEIGHT
-adr_width : .word WIDTH
+tabsym : .word tabsym_octet
+bytes_per_line : .word BYTES_PER_LINE
+bytes : .word BYTES
+height : .word HEIGHT
+width : .word WIDTH
                                                         
