@@ -9,11 +9,11 @@ C_NEGATIF:=
 
 C_SYMETRY:=
 # Comment the following lines to compile your assembler functions instead of the C one
-#C_SYMETRY+=-DC_SYMETRIE_OCTET
-#C_SYMETRY+=-DC_PERMUTER_COLS
+C_SYMETRY+=-DC_SYMETRIE_OCTET
+C_SYMETRY+=-DC_PERMUTER_COLS
 #C_SYMETRY+=-DC_SYMETRIE_AXE_V
-#C_SYMETRY+=-DC_PERMUTER_LIGNES
-#C_SYMETRY+=-DC_SYMETRIE_AXE_H
+C_SYMETRY+=-DC_PERMUTER_LIGNES
+C_SYMETRY+=-DC_SYMETRIE_AXE_H
 
 CFLAGS=-Wall -gdwarf-2 ${C_NEGATIF} ${C_SYMETRY}
 
@@ -26,7 +26,7 @@ C_ASM_OBJS = afficher_contenu_asm.o main_asm.o tabsym_asm.o negatif_asm.o symetr
 
 
 # Replace afficher_contenu.o by afficher_contenu_asm.o to test your own assembler code of afficher_contenu 
-OBJS= afficher_contenu_asm.o main.o tabsym.o negatif.o negatif_asm.o symetrie.o symetrie_asm.o multiplication.o es_asm.o 
+OBJS= afficher_contenu.o main.o tabsym.o negatif.o negatif_asm.o symetrie.o symetrie_asm.o multiplication.o
 
 
 all:	transformer
